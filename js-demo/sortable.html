@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .clearfix::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background-color: #f4f5f6;
+        }
+
+        .conter {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 12px;
+        }
+
+        .title {
+            width: 100%;
+            height: 32px;
+            line-height: 32px;
+            font-size: 15px;
+            color: #222;
+            margin: 17px 0 7px;
+            position: relative;
+        }
+
+        .r {
+            width: 55px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: #f85959;
+            border: 1px solid #f85959;
+            border-radius: 12px;
+            position: absolute;
+            top: 2px;
+            right: 0;
+        }
+
+        .tag {
+            float: left;
+            width: 22.5%;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #222;
+            border: 1px solid #e8e8e8;
+            background-color: #eee;
+            margin-right: 6px;
+            margin-bottom: 10px;
+            /*border-radius: 18px;*/
+        }
+
+        .more {
+            border: 1px dashed #f85959;
+            color: #f85959;
+            margin-bottom: 60px;
+        }
+
+        .color {
+            color: #f85959;
+        }
+
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.8.3/Sortable.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div class="conter">
+    <div class="title">我的频道
+        <div class="r">编辑</div>
+    </div>
+    <div id="tag_h" class="clearfix">
+        <div class="tag color">推荐</div>
+        <div class="tag">热点</div>
+        <div class="tag">视频</div>
+        <div class="tag">北京</div>
+        <div class="tag">社会</div>
+        <div class="tag">科技</div>
+        <div class="tag">订阅</div>
+        <div class="tag">娱乐</div>
+        <div class="tag">图片</div>
+        <div class="tag">体育</div>
+        <div class="tag">财政</div>
+        <div class="tag">汽车</div>
+        <div class="tag">军事</div>
+        <div class="tag">国际</div>
+        <div class="tag">段子</div>
+        <div class="tag">趣图</div>
+        <div class="tag">美女</div>
+        <div class="tag">健康</div>
+        <div class="tag">正能量</div>
+        <div class="tag">特卖</div>
+        <div class="tag">政务</div>
+        <div class="tag">教育</div>
+        <div class="tag">育儿</div>
+        <div class="tag">电影</div>
+        <div class="tag">星座</div>
+        <div class="tag">美食</div>
+    </div>
+    <div class="title">频道推荐</div>
+    <div id="tag_h2" class="clearfix">
+        <div class="tag">精选</div>
+        <div class="tag">房产</div>
+        <div class="tag">数码</div>
+        <div class="tag">时尚</div>
+        <div class="tag">游戏</div>
+        <div class="tag">养生</div>
+        <div class="tag">旅游</div>
+        <div class="tag">辟谣</div>
+        <div class="tag">历史</div>
+        <div class="tag">探索</div>
+        <div class="tag">故事</div>
+        <div class="tag">美文</div>
+        <div class="tag">情感</div>
+        <div class="tag">家具</div>
+        <div class="tag">搞笑</div>
+        <div class="tag">文化</div>
+        <div class="tag">三农</div>
+        <div class="tag">收藏</div>
+        <div class="tag">问答</div>
+        <div class="tag">语录</div>
+    </div>
+    <div class="box">
+        <div class="tag more">更多频道</div>
+    </div>
+</div>
+  <script>
+    // 点击标签切换颜色（排他功能）
+    var tags=document.getElementsByClassName("tag");
+    for (var i=0;i<tags.length;i++) {
+      tags[i].onclick=function () {
+        for(var j=0;j<tags.length;j++){
+          tags[j].className="tag";
+        }
+        this.className="tag color";
+      };
+    }
+
+    var tagH = document.getElementById('tag_h');
+    new Sortable(tagH, {
+      animation: 500,
+      delay: 1,
+      // ghostClass: 'background-class'
+    });
+    var tagH2 = document.getElementById('tag_h2');
+    new Sortable(tagH2, {
+      animation: 500,
+      delay: 1,
+      // ghostClass: 'background-class'
+    });
+
+  </script>
+</body>
+</html>

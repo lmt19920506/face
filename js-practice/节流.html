@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #container{
+      width: 100%; height: 200px; line-height: 200px; text-align: center; color: #fff; background-color: #444; font-size: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script>
+    function throttle(fn) {
+      let canRun = true; // 通过闭包保存一个标记
+      return function () {
+        if (!canRun) return; // 在函数开头判断标记是否为true，不为true则return
+        canRun = false; // 立即设置为false
+        setTimeout(() => { // 将外部传入的函数的执行放在setTimeout中
+          fn.apply(this, arguments);
+          // 最后在setTimeout执行完毕后再把标记设置为true(关键)表示可以执行下一次循环了。当定时器没有执行的时候标记永远是false，在开头被return掉
+          canRun = true;
+        }, 2000);
+      };
+    }
+    function sayHi(e) {
+      console.log(e.target.innerWidth, e.target.innerHeight);
+    }
+    window.addEventListener('resize', throttle(sayHi));
+
+  </script>
+</body>
+</html>

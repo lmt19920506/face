@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 返回值
+    function fn() {
+      var name = 'hello'
+      return function() {
+        return name
+      }
+    }
+    var str = fn()
+    console.log('str---', str())
+
+    // 函数赋值
+    function fn2() {
+      var name = 'hello2'
+      fn2son = function() {
+        return name
+      }
+    }
+    fn2()
+    console.log('fn2son---', fn2son())
+  </script>
+</body>
+</html>

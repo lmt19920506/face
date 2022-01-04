@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promise.all</title>
+</head>
+<body>
+  <script>
+    const p1 = Promise.resolve(1)
+    const p2 = new Promise(resolve => {
+      setTimeout(() => {
+        resolve(2)
+      }, 1000)
+    })
+    const p3 = new Promise(resolve => {
+      setTimeout(() => {
+        resolve(3)
+      }, 4000)
+    })
+    const p4 = Promise.reject('err4')
+    const p5 = Promise.reject('err5')
+
+    // 1.所有的Promise都成功了
+    // const p = Promise.all([p1, p2, p3]).then(res => {
+    //   console.log('res---', res)
+    // }).catch(err => {
+    //   console.log('err---', err)
+    // })
+
+    // 源码实现
+    Promise.myAll = (promises) => {
+      return new Promise((rs, rj) => {
+        let count = 0
+        let result = []
+        const len = promises.length
+        if (len === 0) {
+          return rs([])
+        }
+        promises.forEach((p, i) => {
+          Promise.resolve(p).then(res => {
+            count += 1
+            result[i] = res
+            if (count === len) {
+              rs(result)
+            }
+          }).catch(rj)
+        })
+      })
+    }
+    const p11 = Promise.myAll([p1, p2, p3]).then(res => {
+      console.log('myall---', res)
+    }).catch(console.log)
+  </script>
+</body>
+</html>

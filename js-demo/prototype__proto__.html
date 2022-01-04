@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // https://zhuanlan.zhihu.com/p/35790971
+    function Person(nick, age) {
+      this.nick = nick
+      this.age = age
+    }
+    Person.prototype.sayName = function() {
+      console.log(this.nick)
+    }
+    var p1 = new Person('tom', 18)
+    var p2 = new Person('lucy', 25)
+    p1.sayName()  // tom
+    p2.sayName()  // lucy
+
+    // 实例对象的__proto__指向构造函数的prototype，从而实现继承
+    // prototype对象相当于特定类的所有实例对象都可以访问的公共容器
+    p1.__proto__ === Person.prototpe  // true
+    p2.__proto__ === Person.prototype  // true
+    p1.__proto__ === p2.__proto__   // true
+
+    console.log(Person.prototype)
+    Person.prototype.construtor === Person  // true
+    
+    // 原型链
+    var arr = [1, 2, 3]
+    console.log('arr.valueOf()---', arr.valueOf())
+    
+      
+  </script>
+</body>
+</html>

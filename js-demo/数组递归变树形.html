@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 递归拼接属性结构
+    const rootList = [
+      {id: 1, parent: null, text: '菜单1'},
+      {id: 11, parent: 1, text: '菜单1-1'},
+      {id: 111, parent: 11, text: '菜单1-1-1'},
+      {id: 12, parent: 1, text: '菜单1-2'},
+      {id: 2, parent: null, text: '菜单2'},
+      {id: 21, parent: 2, text: '菜单2-1'},
+    ]
+    function getTreeList(rootList, id, list) {
+      for (const item of rootList) {
+        // console.log('item---', item)
+        if (item.parent === id) {
+          list.push(item)
+        }
+      }
+      for(const i of list) {
+        i.children = []
+        getTreeList(rootList, i.id, i.children)
+        if (i.children.length === 0) {
+          delete i.children
+        }
+      }
+      return list
+    }
+    const res = getTreeList(rootList, null, [])
+    console.log('res---', res)
+  </script>
+</body>
+</html>

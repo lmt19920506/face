@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .g-outer {
+    width: 650px;
+    height: 340px;
+    background-image: url(1.jpg);
+    overflow: hidden;
+}
+.g-inner {
+    height: 340px;
+    background: url(2.jpg);
+    animation: widthchange 3s infinite alternate linear;
+}
+@keyframes widthchange {
+    0% {
+        width: 650px;
+    }
+    100% {
+        width: 0px;
+    }
+}
+  </style>
+</head>
+<body>
+  <div class="g-outer">
+    <div class="g-inner"></div>
+  </div>
+</body>
+</html>

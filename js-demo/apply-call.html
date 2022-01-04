@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // /* 
+    //   apply: 方法能劫持另一个对象的方法，继承里一个对象的属性
+    //   Function.apply(obj, args) 方法能接受2个参数
+    //   obj: 这个对象将代替Function里面的this对象 
+    // */
+    function Person(name, age) {
+      console.log('this---', this)
+      this.name = name
+      this.age = age
+    }
+    // var person = new Person('luky', 13)
+    // console.log('person---', person)
+    function Student(name, age, grade) {
+      Person.apply(this, arguments)
+      this.grade = grade
+    }
+    var student = new Student('zhangsan', 21, '一年级')
+    console.log('student---', student)
+    // /*
+    // 分析：
+    //   Person.apply(this, arguments)
+    //   this:在创建对象的这个时候代表的是student
+    //   arguments: 是一个数组，也就是['zhangsan', 21, '一年级']
+    //   也就是通俗一点讲：用student去执行Person这个类里面的内容，
+    //   在Person这个类里面存在this.name等之类的语句，这样就将属性创建到了student对象里面
+    // */
+
+    // var person = {
+    //   fullname: function() {
+    //     console.log('this---', this)
+    //     return this.firstName + ' ' + this.lastName
+    //   }
+    // }
+    // var person1 = {
+    //   firstName: 'bill',
+    //   lastName: 'gates'
+    // }
+    // let r = person.fullname.apply(person1)
+    // console.log('r---', r)
+
+    // var people = {
+    //   fullname: function(city, country) {
+    //     return this.firstName + ' ' + this.lastName + ',' + city + '-' + country 
+    //   },
+    //   show: function() {
+    //     // console.log('show---this---', a)
+    //     return this
+    //   }
+    // }
+    // var people1 = {
+    //   firstName: 'bill',
+    //   lastName: 'gates' 
+    // }
+    // var dataObj = {
+    //   a: 'haha',
+    //   b: 'yes'
+    // }
+    // var res = people.fullname.apply(people1, ['长沙', '湖南'])
+    // var res2 = people.show.apply(dataObj, ['a', 'c', 'd'])
+    // console.log('res---', res)
+    // console.log('res2---', res2)
+
+
+    // function Person(name, age) {   // 定义一个类：人类
+    //   this.name = name
+    //   this.age = age
+    //   this.sayhello = function() {
+    //     console.log('hello')
+    //   }
+    // }
+    // function Print() {
+    //   console.log('this---', this)
+    //   this.funcName = 'Print'
+    //   this.show = function () {
+    //     var msg = []
+    //     for (var key in this) {
+    //       if (typeof(this[key]) !== 'function') {
+    //         msg.push([key, ':', this[key]].join(''))
+    //       }
+    //     }
+    //     console.log('msg---', msg.join(' '))
+    //   }
+    // }
+    // function Student(name, age, grade, school) {
+    //   Person.apply(this, arguments)
+    //   Print.apply(this, arguments)
+    //   this.grade = grade
+    //   this.school = school
+    // }
+    // var p1 = new Person('jake', 10)
+    // p1.sayhello()
+    // const s1 = new Student('小明', 29, '长沙', '湖南')
+    // console.log('s1---', s1)
+    // s1.show()
+    /*
+      学生类本来不具备任何方法，但是在Person.apply(this, arguments)后，
+      他就具备了Person类的sayhello的方法和所有属性
+      在Print.apply(this, arguments)后就自动得到了show(发放)
+    */
+
+
+    // function num(a, b) {
+    //   console.log('this---', this)
+    //   console.log('num---', a + b)
+    // }
+
+    // function addNum(num1, num2) {
+    //   num.apply(this, arguments)
+    // }
+    // addNum(15, 17)
+
+
+    // var name = '小王',
+    //     age = 17
+    // var obj = {
+    //   name: '小张',
+    //   objAge: this.age,
+    //   myFun: function(address, school) {
+    //     console.log(this.name + '，年龄' + this.age + '-' + address + '-' + school )
+    //   }
+    // }
+    // var other = {
+    //   name: 'lucy',
+    //   age: 22
+    // }
+
+    // console.log('obj.objAge---', obj.objAge)
+    // obj.myFun()
+    // obj.myFun.apply(other, ['湖南', '长沙'])
+    // obj.myFun()
+
+    
+
+  </script>
+</body>
+</html>

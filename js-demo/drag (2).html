@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+       .box {
+           width:500px;
+           height: 150px;
+           border:1px solid black;
+           margin-top: 40px;
+       }
+    </style>
+
+    <script>
+        function dragstart(event) {
+            // 将拖拽对象id存储在dataTransfer中
+            event.dataTransfer.setData("dragContent", event.target.id);
+        }
+ 
+        function drop(event){
+              event.preventDefault();
+            //把拖拽对象放入目标容器中
+            let data = event.dataTransfer.getData('dragContent');
+            event.target.appendChild(document.getElementById(data))
+        }
+ 
+        function dragover(event) {
+           event.preventDefault();
+        }
+     </script>
+</head>
+<body>
+    <div id='dragId' draggable='true' ondragstart="dragstart(event)">我是可以拖拽的文字</div>
+
+    <div id='dragboxId' class="box" ondrop="drop(event)" ondragover='dragover(event)'></div>
+
+
+</body>
+</html>

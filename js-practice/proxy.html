@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // https://juejin.cn/post/6861725116389130254
+
+
+    // 示例1
+    // const xiaowang = {
+    //   loveLetter: '我想和你跳舞'
+    // }
+    // const proxy = new Proxy(xiaowang, {
+    //   get(target, key) {
+    //     if (key === 'loveLetter') {
+    //       return target[key].replace('跳舞', '打猎')
+    //     }
+    //   }
+    // })
+    // function sendLove(obj) {
+    //   console.log(obj.loveLetter)
+    //   obj['haha'] = '哈哈'
+    //   return '滚'
+    // }
+    // console.log(sendLove(proxy))
+
+    // 示例2
+    // function observe(obj, callback) {
+    //   return new Proxy(obj, {
+    //     get(target, key) {
+    //       return target[key]
+    //     },
+    //     set(target, key ,value) {
+    //       target[key] = value
+    //       callback(key, value)
+    //     }
+    //   })
+    // }
+    // const obj = observe({name: 'tom', sex: '男'}, (key, value) => {
+    //   console.log(`属性${key}的值修改为${value}`)
+    // })
+    // obj.name = 'lucy'
+    // obj.sex = '女'
+    // obj['gzh'] = 'mt'
+    // console.log('has--', 'gzh' in obj)
+
+    // 示例3    get
+    // const errorMsg = {
+    //   400: '错误请求',
+    //   401: '系统未授权，请重新登录',
+    //   403: '拒绝访问',
+    //   404: '找不到资源'
+    // }
+    // const proxy = new Proxy(errorMsg, {
+    //   get(target, key) {
+    //     return target[key] || '系统异常，请联系管理员'
+    //   }
+    // })
+    // console.log(proxy[400])
+    // console.log(proxy[500])
+
+
+    // 示例4   set
+    let num = []
+    let proxy = new Proxy(num, {
+      set(target, key, value) {
+        if (value > 10) {
+          value = 10
+        } else if (value < 0) {
+          value = 0
+        }
+        target[key] = value
+        return true
+      }
+    })
+    proxy.push(-1)
+    proxy.push(5)
+    proxy.push(20)
+    console.log('num---', num)
+  </script>
+</body>
+</html>

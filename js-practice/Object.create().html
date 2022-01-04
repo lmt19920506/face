@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let a = {
+      rep: 'apple'
+    }
+    let b = Object.create(a)
+    console.log('a---', a)
+    console.log('b---', b)   // {}
+    // https://www.jianshu.com/p/28d85bebe599
+    
+    /**
+     * Object.create()方法创建的对象时，属性是在原型下面的，也可以直接访问b.rep  // {rea: 'apple'}
+     * 此时这个值不是b自身的，是它通过原型链proto来访问到b的值
+    */
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+    }
+    main {
+      scroll-snap-type: y mandatory;
+      /* 需要把滚动条设置到直接父容器上，
+      scroll-snap-type才能生效
+      默认是在body上，现在是main上 */
+      overflow: scroll;
+      height: 100vh;
+    }
+    section {
+      width: 100vw;
+      height: 100vh;
+      scroll-snap-align: start;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section style="background: red;">页面内容1</section>
+    <section style="background: bisque;">页面内容2</section>
+    <section style="background: blueviolet;">页面内容3</section>
+    <section style="background: pink;">页面内容4</section>
+  </main>
+</body>
+</html>

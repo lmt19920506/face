@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 只考虑对象类型
+    function shallowCopy(obj) {
+      if (typeof obj !== 'object') return
+      let newObj = obj instanceof Array ? [] : {}
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          newObj[key] = obj[key]
+        }
+      }
+      return newObj
+    }
+    let a = [{a: 1, b: 2}]
+    console.log(shallowCopy(a))
+  </script>
+</body>
+</html>

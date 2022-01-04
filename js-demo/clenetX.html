@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    *{padding: 0;margin: 0;}
+    .container{
+        width: 200px;height: 100px;
+        border: 1px solid #c00;
+        position: absolute;
+    }
+    input[type="button"]{
+        margin: 50px;
+        border: none;
+        width: 100px;height: 50px;background: green;
+    }
+</style>
+  <title>Document</title>
+</head>
+<body>
+  <span style="white-space:pre"></span>
+  <div id="div" class="container"></div>
+  <span style="white-space:pre"></span>
+  <script>
+    var box = document.getElementById('div')
+    var x, y, boxClientX, boxClientY
+    var isMove = false
+    box.onmousedown = function(e) {
+      var e = e || window.event
+      boxClientX = e.clientX
+      boxClientY = e.clientY
+      console.log('boxClientX---', boxClientX)
+      console.log('boxClientY---', boxClientY)
+      x = e.clientX - box.offsetLeft
+      y = e.clientY - box.offsetTop
+      isMove = true
+    }
+
+    document.onmousemove = function(ev) {
+      var e = ev || window.event
+      
+      if(isMove)　{
+        box.innerHTML = "clientX: "+e.clientX + ",clientY:"+ e.clientY +
+                        "</br> boxClientX:"+ boxClientX+",boxClientY:" + boxClientY;
+      var moveX = e.clientX - x; //得到距离左边移动距离                    　　
+      var moveY = e.clientY - y; //得到距离上边移动距离
+      box.style.left = moveX + "px";　　
+      box.style.top = moveY + "px";　　　
+      }　
+    }
+    document.onmouseup = function() {
+      isMove = false
+    }
+  </script>
+</body>
+</html>

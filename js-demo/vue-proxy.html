@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proxy</title>
+</head>
+<body>
+  <script>
+    /*eg:1*/
+    // let data = {
+    //   msg: 'hello',
+    //   status: false
+    // }
+    // let vue = new Proxy(data, {
+    //   get(target, key) {
+    //     console.log('get---', target)
+    //     return target[key]
+    //   },
+    //   set(target, key, newVal) {
+    //     console.log('newVal---', newVal)
+    //     if (target[key] === newVal) {
+    //       return
+    //     }
+    //     target[key] = newVal
+    //   }
+    // })
+    // console.log('11---', vue.msg)
+    // vue.msg="haha"
+    // console.log('22---', vue.msg)
+
+    /*eg:2*/
+    // let xiaohong = {
+    //   name: '小红',
+    //   age: 15
+    // }
+    // xiaohong = new Proxy(xiaohong, {
+    //   get(target, key) {
+    //     console.log('key---11', key)
+    //     let result = target[key]
+    //     // 如果是获取年龄属性，则添加岁字
+    //     if (key === 'age') result += '岁'
+    //     return result
+    //   },
+    //   set(target, key, value) {
+    //     console.log('target---', target)
+    //     console.log('key---', key)
+    //     console.log('value---', value)
+    //     console.log('type---', typeof value)
+    //     if (key === 'age' && typeof value !== 'number') {
+    //       throw Error('age字段必须为number')
+    //     }
+    //     target[key] = value
+    //   }
+    // })
+    // console.log(`我叫${xiaohong.name}, 年龄${xiaohong.age}`)
+    // xiaohong.age = 22
+
+    /*eg:3*/
+    const monster1 = {
+      eyeCount: 4
+    }
+    const monsterPrototype = {
+      eyeCount: 2
+    }
+    const handler = {
+      getPrototypeOf(target) {
+        return monsterPrototype
+      }
+    }
+    const proxy1 = new Proxy(monster1, handler)
+    console.log('111---', Object.getPrototypeOf(proxy1) === monsterPrototype)
+  </script>
+</body>
+</html>

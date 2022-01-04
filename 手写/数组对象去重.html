@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let arr = [
+        { id: 1, name: "aa", age: 12 },
+        { id: 1, name: "aa", age: 22 },
+        { id: 2, name: "aa", age: 33 },
+        { id: 2, name: "cc", age: 44 },
+        { id: 2, name: "dd", age: 55 },
+        { id: 4, name: "aa", age: 18 },
+        { id: 5, name: "ff", age: 36 },
+        { id: 3, name: "gg", age: 21 },
+      ];
+      function fn(arr, key) {
+        const res = {};
+        return arr.filter((item) => {
+          console.log('log---', res[item[key]])
+          // return !res.hasOwnProperty(item[key]) && (res[item[key]] = 1);
+          return !Object.prototype.hasOwnProperty.call(res, item[key]) && (res[item[key]] = 1)
+        });
+      }
+      var myData = fn(arr, 'name');
+      console.log(myData);
+    </script>
+  </body>
+</html>

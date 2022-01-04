@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // function fn(time) {
+    //   return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       resolve(`${time}毫秒`)
+    //     }, time)
+    //   })
+    // }
+    // fn(3000).then(res => {
+    //   console.log('res---', res)
+    // }).finally(() => {
+    //   console.log('end')
+    // })
+
+
+    // await只能在async函数里使用
+    // await后面最好接Promise，如果后面接的是普通函数则会直接执行
+    // async函数返回的是一个Promise
+    function fn1() {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(5)
+        }, 1000)
+      })
+    }
+    function fn2(data) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(data*10)
+        }, 2000)
+      })
+    }
+
+    async function req() {
+      const data1 = await fn1()
+      const data2 = await fn2(data1)
+      console.log('data2---', data2)
+    }
+    req()
+  </script>
+</body>
+</html>
