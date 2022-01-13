@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var arr = [1, 2, 3, 4];
+      var del = arr.slice(1, 2); //从下标为1的位置删除，删除两个元素（不包括下标为2的元素）
+      var del1 = arr.slice(-1); //为元素的最后一位
+      var del2 = arr.slice(-6); //当只传入一个参数，而且是负数，length与参数相加
+      var del3 = arr.slice(1, -2); //当传入的参数为一正一负时，length会先与负数相加在截取
+      var del4 = arr.slice(6); //当传入的参数大于length，返回一个空数组
+      console.log(del); // [2]
+      console.log(del1); // [4]
+      console.log(del2); // [1,2,3,4]
+      console.log(del3); // [2]
+      console.log(del4); //[]
+    </script>
+  </body>
+</html>

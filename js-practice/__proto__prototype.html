@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // https://juejin.cn/post/6844903989088092174
+
+
+    // 4概念2准则，任何原型链相等判断都能判断正确
+    /*
+      1.js分为函数对象和普通对象，每个函数都有__proto__属性，但是只有函数对象才有prototype属性
+      2.Object，Function都是js内置的函数，类似的还有常用的Array、RegExp、Date、Boolean、Number、String
+      那么__proto__和prototype到底是什么，两个概念理解它们：
+      3.属性__proto__是一个对象，它有2个属性：constructor和__proto__
+      4.原型对象prototype有一个默认得constructor属性，用来记录实例是由哪个构造函数创建得
+    */
+    function Person(name, age) {
+      this.name = name
+      this.age = age
+    }
+    let person01= new Person('tom' ,18)
+    // 准则1： 原型对象(即Person.prototype)的constructor指向构造函数本身
+    Person.prototype.constructor === Person  // true
+    // 准则2： 实例(即person01)的__proto__跟原型对象指向同一个地方
+    person01.__proto__ === Person.prototype  // true
+    
+
+    // 例子：
+    function Foo() {}
+    let f1 = new Foo()
+    let f2 = new Foo()
+    let a1 = f1.__proto__ == Foo.prototype  // 准则2
+    let a2 = f2.__proto__ == Foo.prototype  // 准则2
+    let a3 = Foo.prototype.constructor === Foo  // 准则1
+    let a4 = Foo.__proto__ == Function.prototype  // 准则2
+    let a6 = Object.prototype.__proto__ === null  // 原型链到此停止
+    // 此处注意：Foo和function的区别，Foo是Function的实例
+
+    console.log('a1---', a1)
+    console.log('a2---', a2)
+    console.log('a3---', a3)
+    console.log('a4---', a4)
+
+    // function Object()分析
+    function Object() {}
+    let o1 = new Object()
+    let o2 = new Object()
+    let b1 = o1.__proto__ == Object.prototype
+    let b2 = o2.__proto__ == Object.prototype
+    let b3 = Object.prototype.__proto__ == null
+    let b4 = Object.prototype.constructor == Object  // 准则1
+    let b5 = Function.prototype.__proto__ == Object.prototype  // 准则2(Function.prototype本质也是普通函数，可适用准则2)
+    let b6 = Object.__proto__ === Function.prototype  // 准则2(Object本职也是函数)
+    
+
+    console.log('b1 ---', b1)
+    console.log('b2 ---', b2)
+    console.log('b3 ---', b3)
+    console.log('b4 ---', b4)
+    console.log('b5 ---', b5)
+    console.log('b6 ---', b6)
+    // console.log('b ---', b)
+    // console.log('b ---', b)
+
+    // 原型对象的作用，是用来存放实例中共有的那部分属性、方法，可以大大减少内存消耗
+  </script>
+</body>
+</html>

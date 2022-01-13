@@ -2,6 +2,14 @@
 
 
 
+
+
+
+
+[TOC]
+
+
+
 ### 一个页面从输入 URL 到页面加载显示完成，这个过程中都发生了什么？
 
 主要包括一下几个基本步骤：
@@ -50,7 +58,7 @@ https://blog.csdn.net/yorcentroll/article/details/118691688
 
 ### 说一下http缓存策略，有什么区别，分别解决了什么问题
 
-###### 1）浏览器缓存策略
+**1）浏览器缓存策略**
 
 浏览器每次发起请求时，先在本地缓存中查找结果以及缓存标识，根据缓存标识来判断是否使用本地缓存。如果缓存有效，则使用本地缓存；否则，则向服务器发起请求并携带缓存标识。根据是否需向服务器发起HTTP请求，将缓存过程划分为两个部分：
 强制缓存和协商缓存，强缓优先于协商缓存。
@@ -167,9 +175,9 @@ HTTP缓存都是从第二次请求开始的：
 
 https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/5
 
-###### 1）防抖
+**1）防抖**
 
-- 触发高频时间后n秒内函数只会执行一次，如果n秒内再次触发，则重新计算时间
+- 触发高频事件后n秒内函数只会执行一次，如果n秒内再次触发，则重新计算时间
 
 - 当持续触发事件时，一定时间段内没有再触发事件，事件处理函数才会执行一次，如果设定的时间到来之前，又一次触发了事件，就重新开始延时。
 
@@ -224,7 +232,7 @@ function debounce(fn) {
 
 https://github.com/mqyqingfeng/Blog/issues/22
 
-###### 2)节流
+**2)节流**
 
 - 高频事件触发，但在n秒内只会执行一次，所以节流会稀释函数的执行频率
 
@@ -258,17 +266,17 @@ https://github.com/mqyqingfeng/Blog/issues/26
 
 ### vue3.0里为什么要用Proxy Api代替defineProperty Api？--响应式优化
 
-###### 1）defineProperty Api的局限性最大的原因是它只能针对单例属性做监听
+**1）defineProperty Api的局限性最大的原因是它只能针对单例属性做监听**
 
 - vue2.x中的响应式原理正式基于defineProperty的descriptor，对data中的属性做了遍历+递归，为每个书信设置了getter和setter。
 
 - 这也是为什么vue只能针对data中预定义过的属性做出响应的原因，在vue中使用下标的方式直接修改属性的值或者添加一个预先不存在的对象属性，是无法做到setter监听的，这是defineProperty的局限性。
 
-###### 2）Proxy Api的监听是针对一个对象的，那么对这个对象的所有操作回进入监听操作，这就完全可以代理所有属性，将会带来很大的性能提升和更有的代码
+**2）Proxy Api的监听是针对一个对象的，那么对这个对象的所有操作回进入监听操作，这就完全可以代理所有属性，将会带来很大的性能提升和更有的代码**
 
 - Proxy可以理解成，在目标对象之前架设一层“拦截”，外界对该对象的访问，都必须先通过这层拦截，一次提供了一种机制，可以对外界的访问进行过滤和改写。
 
-###### 3）响应式是惰性的
+**3）响应式是惰性的**
 
 在vue2.x中，对于一个深层属性嵌套的对象，要劫持它内部深层次的变化，就需要递归遍历这个对象，执行Object.defineProperty把每一层对象数据都贬称响应式的，这无疑会有很大的性能消耗
 
@@ -278,7 +286,7 @@ https://github.com/mqyqingfeng/Blog/issues/26
 
 ### vue3.0编译做了哪些优化（底层，源码）
 
-###### 1)生成Block tree
+**1)生成Block tree**
 
 - vue2.0的数据更新并触发重新渲染的力度是组件级的，单个组件内部，需要遍历该组件的整个vnode树。
 
@@ -292,7 +300,7 @@ https://github.com/mqyqingfeng/Blog/issues/26
 
 ![](C:\Users\mingtai.liu\Desktop\house\block.jpg)
 
-###### 2)slot编译优化
+**2)slot编译优化**
 
 - vue2.x中，如果有一个组件传入了slot，那么每次父组件更新的时候，会强制子组件update，造成性能浪费。
 
@@ -306,7 +314,7 @@ https://github.com/mqyqingfeng/Blog/issues/26
 
 ### Vue3.0是如何变得更快的（底层，源码）
 
-###### 1）diff方法优化
+**1）diff方法优化**
 
 - vue2.x中的虚拟dom是进行全量的对比
 
@@ -314,15 +322,29 @@ https://github.com/mqyqingfeng/Blog/issues/26
 
 ​		在与上次虚拟节点进行对比的时候，只对比带有patch flag的节点，并且可以通过flag的信息得知当前节点要对比的具体内容
 
-###### 2）hoistStatic静态提升
+**2）hoistStatic静态提升**
 
 - vue2.x：无论元素是否参与更新，每次都会重新创建
 
 - vue3.0：对不参与更新的元素，只会被创建一次，之后会在每次渲染的时候被不停的复用
 
-###### 3）cacheHndlers事件侦听器缓存
+**3）cacheHndlers事件侦听器缓存**
 
 - 默认情况下onClick会被是为动态绑定，所以每次都会去追踪它的变化，但是因为是同一个函数，所以没有追踪变化，直接缓存起来服用即可。
+
+
+
+### Vue3在性能方面的提升
+
+1.编译阶段，对diff算法优化、静态提升等等
+
+2.响应式系统。Proxy()替代Object.defineProperty()监听对象。监听一个对象，不需要再深度遍历，Proxy就可以劫持整个对象
+
+3.体积包减少。Composition API的写法，可以更好的进行tree shaking，减少上下文没有引入的代码，减少打包后的文件提交
+
+4.新增片段特性。Vue文件的<template>标签内，不再需要强制声明一个标签，节省额外的节点开销。
+
+
 
 ### 介绍下 Set、Map、WeakSet 和 WeakMap 的区别？
 
@@ -524,7 +546,7 @@ const child = new Parent('test', 26);
 child.sayName() //test
 ```
 
-###### 一、new操作中发生了什么
+**一、new操作中发生了什么**
 
 比较直观的感觉，<u>当我们new一个构造函数，得到的实例继承里构造器的构造属性（this.name这些）以及原型上的属性</u>。
 
@@ -567,7 +589,7 @@ const child = new Parent('test', '26');
 
 **this的创建与返回是隐性的**，手动返回that的做法；这也验证了隐性的这两步确实是存在的。
 
-###### 二、实现一个简单的new方法（winter大神）
+**二、实现一个简单的new方法（winter大神）**
 
 • 以构造器的prototype属性为原型，创建新对象；
 
@@ -640,69 +662,73 @@ https://juejin.cn/post/7031793667492806670
 
 https://zhuanlan.zhihu.com/p/73046285
 
-1. 介绍一下原型链  https://juejin.cn/post/6844903989088092174
+1. ### 介绍一下原型链  https://juejin.cn/post/6844903989088092174
 
-2. 介绍一下前端的继承方式
+   https://juejin.cn/post/7007416743215759373
 
-3. undefine与null的区别
+2. ### 介绍一下前端的继承方式
 
-4. HTTP，TCP，七层网络结构，讲一下
+3. ### undefine与null的区别
 
-5. chrome 浏览器最多同时加载多少个资源，那如果想同时加载更多资源应该怎么办
+4. ### HTTP，TCP，七层网络结构，讲一下
 
-6. http2 的多路复用是什么原理
+5. ### chrome 浏览器最多同时加载多少个资源，那如果想同时加载更多资源应该怎么办
 
-7. 实现一个改变 this 指向的 call 方法，介绍一下原理
+6. ### http2 的多路复用是什么原理
 
-8. 跨域
+7. ### 实现一个改变 this 指向的 call 方法，介绍一下原理
 
-9. 解 JSON Web Token 么，它和其他的鉴权方式有什么区别
+8. ### 跨域
 
-10. 网络安全有了解么，CSRF 如何防御，SameSite 有哪几个值
+9. ### 解 JSON Web Token 么，它和其他的鉴权方式有什么区别
 
-11. 对 TDD 的看法是怎样的
+10. ### 网络安全有了解么，CSRF 如何防御，SameSite 有哪几个值
 
-12. 移动端一套代码适配多端是如何做的
+11. ### 对 TDD 的看法是怎样的
 
-13. 如果用户希望自己定义一个颜色生成对应的皮肤，应该怎么制定方案
+12. ### 移动端一套代码适配多端是如何做的
 
-14. Vue 和 React 的区别      https://jishuin.proginn.com/p/763bfbd551b5
+13. ### 如果用户希望自己定义一个颜色生成对应的皮肤，应该怎么制定方案
 
-15. Vue 和 React 的 Diff 算法有哪些区别
+14. ### Vue 和 React 的区别      https://jishuin.proginn.com/p/763bfbd551b5
 
-16. 编写一个方法，判断一个字符串是否是合法的 XML
+15. ### Vue 和 React 的 Diff 算法有哪些区别
 
-17. 浏览器缓存机制 https://blog.csdn.net/weixin_47254130/article/details/113574185?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.no_search_link&spm=1001.2101.3001.4242.1
+16. ### 编写一个方法，判断一个字符串是否是合法的 XML
 
-18. 节流和防抖的原理是什么
+17. ### 浏览器缓存机制
 
-19. 事件循环介绍一下
+     https://blog.csdn.net/weixin_47254130/article/details/113574185?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.no_search_link&spm=1001.2101.3001.4242.1
 
-20. 0.1 + 0.2 为什么不等于 0.3，为什么会有误差，如何解决
+18. ### 节流和防抖的原理是什么
 
-    大数加法如何实现
+19. ### 事件循环介绍一下
 
-    v-for 为什么会有 key
+20. ### 0.1 + 0.2 为什么不等于 0.3，为什么会有误差，如何解决
 
-    为什么 vue 的 data 用一个函数而不是一个对象
+    ### 大数加法如何实现
 
-    虚拟 DOM 介绍一下
+    ### v-for 为什么会有 key
 
-    diff 算法介绍一下
+    ### 为什么 vue 的 data 用一个函数而不是一个对象
 
-    webpack 和 Vite 的区别，迁移过程是怎么样的
+    ### 虚拟 DOM 介绍一下
 
-    前端工程化你是怎么理解的
+    ### diff 算法介绍一下
 
-    vue 和 react 都看过哪些部分源码，v-model 的原理是什么，虚拟 dom 的优缺点是什么
+    ### webpack 和 Vite 的区别，迁移过程是怎么样的
 
-    typescript 相比 JavaScript 的优点是什么
+    ### 前端工程化你是怎么理解的
 
-    export 和 module.exports 的区别
+    ### vue 和 react 都看过哪些部分源码，v-model 的原理是什么，虚拟 dom 的优缺点是什么
 
-    node 的内存泄露是如何监控的
+    ### typescript 相比 JavaScript 的优点是什么
 
-    node 读取文件的时候，fs.readFile 和 stream 有什么区别
+    ### export 和 module.exports 的区别
+
+    ### node 的内存泄露是如何监控的
+
+    ### node 读取文件的时候，fs.readFile 和 stream 有什么区别
 
     1. Vue 兄弟组件传值方式都有哪些
 
@@ -813,7 +839,7 @@ https://zhuanlan.zhihu.com/p/73046285
 
 ### 对虚拟DOM的理解？虚拟DOM主要做了什么？虚拟DOM本身是什么？
 
-一、什么是虚拟DOM
+**一、什么是虚拟DOM**
 
 从本质上来说，Virtual Dom是一个javascript对象，通过对象的方式来表示DOM结构。将页面的状态抽象为对象的形式，配合不同的渲染工具，使跨平台渲染成为可能。通过事务处理机制，将多次DOM修改的结果一次性的更新到页面上，从而有效的减少页面渲染的次数，减少修改DOM的重绘重排次数，提高渲染性能。
 
@@ -825,7 +851,7 @@ https://zhuanlan.zhihu.com/p/73046285
 
 另外现在全段架构的一个基本要求就是无需手动操作DOM，一方面是因为手动操作DOM无法保证程序性能，多人协作的项目中如果review不严格，可能会有开发者写出性能较低的代码，另一方面更重要的是省略手动DOM操作可以大大提高开发效率
 
-###### 二、为什么要用Virtual DOM
+**二、为什么要用Virtual DOM**
 
 1.保证性能下限，在不进行手动优化的情况下，提供过得去的性能
 
@@ -839,7 +865,7 @@ https://github.com/lgwebdream/FE-Interview/issues/920
 
 ### webpack祖国哪些优化，挨罚效率方面、打包策略方面等等
 
-###### 1）优化webpack得构建速度
+**1）优化webpack得构建速度**
 
 - 使用高版本的webpack（使用webpack4甚至webpack5）
 
@@ -897,7 +923,7 @@ https://github.com/lgwebdream/FE-Interview/issues/920
 
   - 使用DllPlugin进行分包，使用DllReferencePlugin(索引链接)对mainfest.json引用，让一些基本不会改动的代码先打包城静态资源，避免反复编译浪费时间。
 
-###### 2）使用webpack4-优化原因
+**2）使用webpack4-优化原因**
 
 - V8带来的优化（for of 替代forEach、Map和Set替代Object、includes替代indexOf）
 - 默认使用更快的md4 hash算法
@@ -941,14 +967,14 @@ IgnorePlugin
 
 ### MVVM和MVC是什么？有什么区别
 
-###### MVC：
+**MVC：**
 
 - Model（模型）：负责从数据库取数据
 - View(视图)：负责展示数据的地方
 - Controller(控制器)：用户交互的地方，例如点击事件等等
 - 思想：Controller将Model的数据展示再View上
 
-###### MVVM：
+**MVVM：**
 
 - VM：ViewMode，做了两件事，达到了数据的双向绑定
 
@@ -958,7 +984,7 @@ IgnorePlugin
 
 - 思想：实现了View和Model的自动同步，也就是当Model的属性改变时，我们不用再自己手动操作DOM元素，来改变View的显示，而是改变属性后，该属性对应View层显示会自动改变（对应Vue数据驱动的思想）
 
-###### 区别：
+**区别：**
 
 整体看来，MVVM和MVC精简很多，不仅简化了业务与界面的依赖，还解决了数据频繁更新的问题，不用再用选择器操作DOM元素。因为再MVVM中，View不知道Model的存在，Model和ViewModel也观察不到View，这种低耦合模式提高代码的可复用性。
 
