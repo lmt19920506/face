@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>寄生组合式继承(call + 寄生式封装)</title>
+</head>
+<body>
+  <script>
+    function Father(name) {
+      this.name = name
+      this.color = ['red', 'green', 'black']
+    }
+    Father.prototype.sayName = function() {
+      console.log(this.name)
+    }
+    Father.prototype.someValue = '2'
+
+    function Son(name, age) {
+      Father.call(this, name)
+      this.age = age
+    }
+
+    function inhertPro(son, father) {
+      const fatherPrototype = Object.create(father.prototype) // 原型链继承
+      son.prototype = fatherPrototype  // 设置Son.prototype的原型是Father.prototype
+      // 修正constructor指向
+      // constructor的作用：返回创建实例对象的Object构造函数的引用
+      // 在这里保持constructor指向的一致性
+      son.prototype.constructor = son
+    }
+    inhertPro(Son, Father)
+    // var sonInstance = new Son()
+    Son.prototype.sayAge = function(){
+      console.log(this.age)
+    }
+
+    let son1 = new Son('tom', 19)
+    son1.sayName()
+    son1.sayAge()
+    son1.color.push('pink')
+    console.log(son1.color)
+
+    let son2 = new Son('lucy', 33)
+    son2.sayAge()
+    console.log(son2.color)
+
+    /*
+      优点：
+      1.只调用1次父类构造函数
+      2。Son可以向Father传参
+      3.父类方法可复用
+      4.父类的引用属性不会共享
+
+      寄生式组合继承可以算是引用类型继承的最佳模式
+    */
+  </script>
+</body>
+</html>

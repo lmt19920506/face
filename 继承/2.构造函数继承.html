@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>构造函数继承</title>
+</head>
+<body>
+  <script>
+    /*
+      在子类构造函数中，调用父类构造函数，
+      可以在子类构造函数中使用call()和apply()方法
+    */
+    // function Parent() {
+    //   this.info = {
+    //     name: 'lmt',
+    //     age: 18
+    //   }
+    // }
+    // function Child() {
+    //   Parent.call(this)
+    // }
+
+    // let child1 = new Child()
+    // child1.info.gender = '男'
+    // console.log(child1.info.gender)  // 男
+    // console.log(child1.info)   // {name: 'lmt', age: 18, gender: '男'}
+
+    // let child2 = new Child()
+    // console.log(child2.info)  // {name: 'lmt', age: 18}
+
+    /*
+      通过使用call()和apply()方法，Parent构造函数在为Child的实例创建的新对象的上下文执行了，
+      就相当于新的Child实例对象上运行了Parent()函数中的所有初始化代码，
+      结果就是每个实例都有自己的info属性.
+    */
+
+    // 1.传递参数
+    // 相比原型链继承，盗用构造函数的一个优点在于可以在子类构造函数中向父类构造函数传递参数
+    function Parent(name) {
+      this.info = {
+        name: name
+      }
+      this.color = ['red', 'green', 'black']
+    }
+    function Child(name) {
+      // 继承自Parent, 并传参
+      // Parent的this指向Child的this
+      // 使用call调用父类，Parent将会立即被执行，并且将父类的Parent的this执行Child的this
+      // 实例化子类，this将指向new期间创建的新对象，返回该新对象
+      Parent.call(this, name)
+      // 实例属性
+      this.age = 18
+    }
+
+    let child1 = new Child('lucy')
+    child1.color.push('pink')
+    console.log(child1.color)  // ['red', 'green', 'black', 'pink']
+    console.log(child1.info.name)  // lucy
+    console.log(child1.age)  // 18
+
+    let child2 = new Child('tom')  // tom
+    console.log(child2.color)  // ['red', 'green', 'black']
+    console.log(child2.age)  // 18
+
+    /*
+      优点：
+      1.可以向父类传参
+      2.解决父类this声明的属性被实例共享的问题
+      
+      缺点：
+      1.只能继承父类通过this声明的属性和方法，不能继承父类prototype导航的属性和方法
+      2.父类方法无法复用，每次实例化子类，都要之心父类函数。
+        重新声明父类所定义的方法，无法复用
+    */
+  </script>
+</body>
+</html>

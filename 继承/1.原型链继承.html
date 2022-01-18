@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原型链继承</title>
+</head>
+<body>
+  <script>
+    /*
+    原型链继承：将父类的实例作为子类的原型
+    优点：父类的方法可以复用
+    缺点：1.父类的所有引用属性（info）会被所有子类共享，更改一个子类的引用属性，其他子类也会受影响
+          2.子类实例不能给父类构造函数传参
+          (父类使用this声明的属性被所有实例共享。原因是实例化是父类一次性赋值到子类实例的原型 上，
+           它会将父类通过this声明的属性也赋值到子类原型上。
+           例如在父类中一个数组值，在子类的多个实例中，无论哪一个实例去修改这个数组的值，都会影响到其他子类实例)
+    */
+
+    function Parent() {
+      this.isShow = true
+      this.info = {
+        name: 'lmt',
+        age: 18
+      }
+    }
+    Parent.prototype.getInfo = function() {
+      console.log(this.info)
+      console.log(this.isShow)
+    }
+    
+    function Child() {}
+    Child.prototype = new Parent()  // 函数的原型指向构造函数的实例
+
+    let child1 = new Child()
+    child1.info.gender = '男'
+    child1.getInfo()
+
+    let child2 = new Child()
+    child2.getInfo()
+    child2.info.isShow = false
+    console.log(child2.info.isShow)  // false
+    console.log(child1.info.isShow)  // false
+  </script>
+</body>
+</html>

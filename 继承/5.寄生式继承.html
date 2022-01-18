@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>寄生式继承</title>
+</head>
+<body>
+  <script>
+    // 创建一个仅用于封装继承过程的函数，该函数在内部以某种方式增强对象，最后返回兑现
+    // 在原型式继承的基础上进行增强对象
+    function objectCopy(obj) {
+      function Fu() {}
+      Fu.prototype = obj
+      return new Fu()
+    }
+
+    function createAnother(original) {
+      let clone = objectCopy(original)  // 继承一个对象， 返回新函数
+      // do something 以某种方式来增强对象
+      clone.getName = function() {
+        console.log(this.name)
+      }
+      return clone  // 返回这个对象
+    }
+
+    let person = {
+      name: 'lmt',
+      friends: ['rose', 'tom', 'jack']
+    }
+    let person1 = createAnother(person)
+    person1.friends.push('gj')
+    console.log(person1.friends)
+    person1.getName()
+
+    let person2 = createAnother(person)
+    console.log(person2.friends)
+
+    /*
+      优点： 兼容性好，最简单的对象继承
+
+      缺点： 多个实例共享被继承的属性，存在被篡改的情况，不能传递参数
+    */
+  </script>
+</body>
+</html>

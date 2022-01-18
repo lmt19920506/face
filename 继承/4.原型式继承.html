@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原型式继承</title>
+</head>
+<body>
+  <script>
+    function cloneObj(obj) {
+      function F() {}  
+      F.prototype = obj  // 将被继承的对象作为空函数的prototype
+      return new F()  // 返回new期间创建的新对象，此对象的原型为被继承的对象
+    }
+
+    let person = {
+      name: 'lmt',
+      age: 18,
+      friend: ['tom', 'harry', 'lucy'],
+      sayName: function() {
+        console.log(this.name)
+      }
+    }
+
+    let p1 = cloneObj(person)
+    p1.name = 'gj'
+    p1.friend.push('gaga')
+    p1.sayName()  // gj
+    console.log(p1.friend)  // ['tom', 'harry', 'lucy', 'gaga']
+
+    let p2 = cloneObj(person)
+    p2.name = 'swift'
+    p2.sayName()  // swift
+    console.log(p2.friend)  // ['tom', 'harry', 'lucy', 'gaga']
+    p2.friend.push('xixi')
+    console.log(p2.friend)  // ['tom', 'harry', 'lucy', 'gaga', 'xixi']
+
+    console.log(person.friend)  // ['tom', 'harry', 'lucy', 'gaga', 'xixi']
+
+    /*
+      优点：
+      1.兼容性好，最简单的对象继承 
+      2.父类的方法可复用，
+      
+
+      缺点：
+      1.父类的引用会被所有子类所共享，存在被篡改的情况
+      2.子类不能向父类传参
+
+      // ES5的Object.create()方法在只有第一个参数时，与这里的cloneObje方法效果相同
+    */
+  </script>
+</body>
+</html>

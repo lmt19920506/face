@@ -515,6 +515,32 @@ for (var i = 0; i < 3; i++) {
 
 
 
+### new的过程
+
+伪代码表示：
+
+```javascript
+var a = new myFunction('Li', 'Cherry')
+new myFunction {
+    var obj = {}
+    obj.__proto__ = myFunction.prototype
+    var result = myFunction.call(obj, 'Li', 'Cherry')
+    return typeof result === 'obj' ? result : obj
+}
+```
+
+1.创建一个空对象obj；
+
+2.将新创建的空对象的隐式原型指向其构造函数的显示原型；
+
+3.使用call改变this的指向；
+
+4.如果无返回值或者返回一个非对象值，则将obj返回作为新对象；如果返回值是一个新对象的话那么则直接返回该对象。
+
+所以，我们可以看到，在new的过程中，我是是使用call改变了this的指向。
+
+
+
 ### js new一个对象的过程，实现一个简单的new方法
 
 对于大部分前端开发者而言，new一个构造函数或类得到对应实例，是非常普遍的操作了。下面的例子中分别通过构造函数与class类实现了一个简单的创建实例的过程。

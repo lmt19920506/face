@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>组合继承</title>
+</head>
+<body>
+  <script>
+    /*
+    组合继承综合了原型链继承和盗用构造函数继承，将两者的有点结合了起来
+    基本的思路是：
+    使用原型链继承了原型上的方法和属性，而通过构造函数继承实例的属性
+    这样既可以把方法定义在原型上以实现复用，又可以让每个实例都有自己的属性
+    */
+    function Parent(name) {
+      this.name = name
+      this.color = ['red', 'yellow', 'black']
+    }
+    Parent.prototype.sayName = function(name) {
+      this.name = name
+    }
+
+    function Child(name, age) {
+      Parent.call(this, name)  // 借用构造函数继承父类this属性和方法到子类实例属性上
+      this.age = age
+    }
+    Child.prototype = new Parent()  // 原型链继承，将this和prototype声明的属性和方面继承至子类的prototype上
+    Child.prototype.sayAge = function() {
+      console.log(this.age)
+    }
+
+    let child1 = new Child('tom', 19)
+    child1.color.push('pink')
+    console.log(child1.color)  // ['red', 'yellow', 'black', 'pink']
+    console.log(child1.name)  // tom
+    console.log(child1.age)  // 19
+
+    let child2 = new Child('lucy', 30)
+    console.log(child2.color)  // ['red', 'yellow', 'black']
+    console.log(child2.name)  // tom
+    console.log(child2.age)  // 30
+
+    /*
+      优点： 
+      1.解决原型链继承父类this声明的属性或者方法被共享的问题
+      2.解决借用构造函数不能继承父类prototype对象上的属性和方法的问题
+
+      缺点：
+      1.调用了父类函数2次，造成一定的性能问题
+      2.因调用2次父类，导致父类通过this声明的属性和方法被生成2份的问题
+      3.原型链上下文丢失，子类和父类通过prototype声明的属性和方法都存在云子类prototype上
+    */
+  </script>
+</body>
+</html>
