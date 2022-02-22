@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+  <title>Spin</title>
+  <style>
+    .cir{
+      height:100px;
+      width:100px;
+      background-color:blue;
+      border-radius:100px;  /* 利用圆角，将div变成圆形 */
+      animation: cir 2s linear infinite alternate; 
+      /* 动画：动画名（cir） 持续时间(2s) 动画方式（linear）动画迭代次数（infinite无限次）动画方向（alternate交替播放） */
+    }
+    @keyframes cir{
+      from{margin-top:0px}
+      to{margin-top:200px}
+    }
+  </style>
+</head>
+<body>
+  <div class="cir"></div>
+</body>
+</html>

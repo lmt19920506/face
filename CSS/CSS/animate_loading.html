@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+  <title>Spin</title>
+  <style>
+    .spin {
+      width: 50px;
+      height: 50px;
+      border: 3px solid #D0D3D4;
+      border-top-color: #626567;
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+ 
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+ 
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="spin"></div>
+</body>
+</html>

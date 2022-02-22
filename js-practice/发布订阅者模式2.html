@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var pubsub = (()=>{
+  var topics = {};
+  function subscribe(topic,fn){
+    if(!topics[topic]){
+      topics[topic] = [];  
+    }
+    topics[topic].push(fn);
+  }
+  function publish(topic,...args){
+    if(!topics[topic])
+      return;
+    for(let fn of topics[topic]){
+      fn(...args);  
+    }
+  }
+ return {
+      subscribe,
+      publish
+  }
+})()
+
+    pubsub.subscribe('test',function(a,b){  //订阅者A订阅了test事件
+  console.log(a,b);    
+});
+pubsub.publish('test','123','HH');   //123  HH（发布者B发布了test事件）
+  </script>
+</body>
+</html>

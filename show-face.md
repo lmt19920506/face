@@ -14,6 +14,22 @@
 
 主要包括一下几个基本步骤：
 
+1. DNS域名解析：浏览器向DNS服务器发起请求，解析url中域名对应的ip地址
+2. 建立TCP连接：解析出ip地址后，根据ip地址和默认80端口，和服务器建立TCP连接
+3. 发起http请求：浏览器发起读取文件的http请求
+4. 服务器响应请求并返回结果：服务器对浏览器请求做出响应，并把对应的html文件发送给浏览器
+5. 关闭TCP连接：通过4次挥手释放TCP连接
+6. 浏览器渲染：客户端解析HTML内容并渲染出来，浏览器接受到数据包后的解析流程为：
+   - 构建dom树：词法分析然后解析成dom树，
+   - 构建css规则树：生成css规则树
+   - 构建render树：浏览器将dom树和css树结合，并构建出渲染树
+   - 布局：计算出每个节点在屏幕中的位置
+   - 绘制：即遍历render树，并使用ui后端层绘制出每个节点
+
+
+
+
+
 1. DNS解析URL对应的IP
 
 2. 根据IP建立TCP连接（3次握手）
@@ -38,7 +54,7 @@ https://blog.csdn.net/yorcentroll/article/details/118691688
 
 - ###### 三次握手：
 
-第一次握手：建立连接时，客户端发送syc包（syn=j）到服务器，并进入sync_send状态，等待服务器确认
+第一次握手：建立连接时，客户端发送syn包（syn=j）到服务器，并进入sync_send状态，等待服务器确认
 
 第二次握手：服务器接收到syn包，必须确认客户的syn（ack = j + 1），同时自己也发送一个syn包（syn = k），即syn + ack包，此时服务器进入syn_recv状态
 
@@ -56,6 +72,68 @@ https://blog.csdn.net/yorcentroll/article/details/118691688
 
 第四次挥手：客户端A发回ack报文确认，并将确认序号设置为序号+1
 
+### 浏览器强缓存和协商缓存
+
+- **强缓存**
+
+使用强缓存时，如果缓存资源有效，则直接使用缓存资源，不必再向服务器发起请求。
+
+强缓存策略可以通过两种方式来设置，分别是http头信息中的Expires属性和Cache-Control属性
+
+- **协商缓存**
+
+如果命中强制缓存，我们无需发起新的请求，直接使用缓存内容，如果没有命中强制缓存，如果设置了协商缓存，这个时候协商缓存就会发挥作用了
+
+命中协商缓存的条件有2个：
+
+1.max-age=xxx过期了
+
+2.值为no-store
+
+使用协商缓存时，会先向服务器发送一个请求，如果资源没有发生修改，则返回一个304状态，让浏览器使用本地的缓存副本。如果资源发生了修改，则返回修改后的资源
+
+### 浏览器过程：
+
+浏览器第一次加载资源，服务器返回200，浏览器从服务器下载资源文件，并缓存资源文件与response header，以供下次加载时对比使用；
+
+下一次加载资源时，由于强缓存优先级别较高，先比较当前时间与上一次返回200时的时间差，如果没有超过cache-control设置的max-age，则没有过期，并命中强缓存，直接从本地读取资源。如果浏览器不支持HTTP1.1，则使用expires头判断是否过期；
+
+如果资源过期，则表明强制缓存没有命中，则开始协商缓存，向服务器发送带有if-None-Match和if-modified-Since的请求；
+
+服务器接受到请求后，优先根据Etag的值判断被请求的文件有没有做修改，Etag值一致则没有修改，命中协商缓存，返回304；如果不一致则有改动，直接返回新的资源文件带上Etag值并返回200
+
+如果服务器收到的请求没有Etag值，则将if-Modify-Since和被请求文件的最后修改时间做比对，一致则命中协商缓存，返回304；不一致则将返回新的last-modified和文件并返回200
+
+### 
+
+### http和https
+
+http是客户端和服务器端请求和应答的标准，用于从www服务器传输超文本到本地浏览器的超文本传输协议
+
+https：是以安全为目标的http通道，即在http下加入ssl层进行加密。其作用是建立一个信息安全通道，来确保数据的传输，确保网站的真实性。
+
+### http和https的区别及优缺点
+
+- http是超文本传输协议，信息是明文传输，https协议要比http安全，https是具有安全性得ssl加密传输协议，可防止数据在传输过程中被窃取，修改，确保数据得完整性。
+
+- http协议得默认端口是80，https默认端口是443
+
+- http的连接很简单，是无状态的，https握手阶段很费时，会使页面加载时间延长50%，增加10%-20%的耗电
+
+- https缓存不如http高效，会增加数据开销
+- https协议需要ca证书，费用较高，
+- ssl证书需要绑定ip，不能在同一个ip上绑定多个域名，ipv4资源支持不了这种消耗
+
+### TCP和UDP的区别
+
+TCP是面向连接的，UDP是面向无连接的
+
+TCP仅支持单播传输，UDP提供了单播、多播和广播的功能
+
+TCP的三次握手保证了数据传输的可靠性，UDP是无连接的、不安全的一种信息传输协议，首先不安全性体现在他是无连接的，接受到的信号都不需要发送确认信息，发送端不知道数据是否会正确接收。
+
+UDP的头部开销比TCP小，数据传输速率更好，实时性更好。
+
 ### 说一下http缓存策略，有什么区别，分别解决了什么问题
 
 **1）浏览器缓存策略**
@@ -72,7 +150,7 @@ HTTP缓存都是从第二次请求开始的：
 - 第一次请求资源时，服务器返回资源，并在response header中回传资源的缓存策略；
 - 第二次请求时，浏览器判断这些请求参数，击中强缓存就直接200，否则就把请求参数加到request header头中传给服务器，看是否击中协商缓存，击中则返回304，否则服务器会返回新的资源。这是缓存运作的一个整体流程图：
 
-![](C:\Users\mingtai.liu\Desktop\js-demo\1.png)
+!![http缓存](C:\Users\mingtai.liu\Desktop\face\img\http缓存.png)
 
 **2）强缓存**
 
@@ -262,17 +340,28 @@ function throttle(fn) {
 
 https://github.com/mqyqingfeng/Blog/issues/26
 
+### · Proxy 相比于 defineProperty 的优势?
 
+Object.definePorperty的优势主要有3个：
+
+- 不能监听数组的变化
+- 必须遍历对象的每个属性
+- 必须深层遍历嵌套的对象。
+
+Proxy优点：
+
+- 针对对象，而不是对象的属性，因此就不需要对key进行遍历，解决了Object.defineproperty（）必须遍历对象的每个属性的问题
+- 支持数组：Proxy不需要对数组的方法进行重载，减少了代码，等于时降低了维护成本。
 
 ### vue3.0里为什么要用Proxy Api代替defineProperty Api？--响应式优化
 
 **1）defineProperty Api的局限性最大的原因是它只能针对单例属性做监听**
 
-- vue2.x中的响应式原理正式基于defineProperty的descriptor，对data中的属性做了遍历+递归，为每个书信设置了getter和setter。
+- vue2.x中的响应式原理正式基于defineProperty的descriptor，对data中的属性做了遍历+递归，为每个属性设置了getter和setter。
 
 - 这也是为什么vue只能针对data中预定义过的属性做出响应的原因，在vue中使用下标的方式直接修改属性的值或者添加一个预先不存在的对象属性，是无法做到setter监听的，这是defineProperty的局限性。
 
-**2）Proxy Api的监听是针对一个对象的，那么对这个对象的所有操作回进入监听操作，这就完全可以代理所有属性，将会带来很大的性能提升和更有的代码**
+**2）Proxy Api的监听是针对一个对象的，那么对这个对象的所有操作回进入监听操作，这就完全可以代理所有属性，将会带来很大的性能提升和更优的代码**
 
 - Proxy可以理解成，在目标对象之前架设一层“拦截”，外界对该对象的访问，都必须先通过这层拦截，一次提供了一种机制，可以对外界的访问进行过滤和改写。
 
@@ -509,7 +598,8 @@ for (var i = 0; i < 3; i++) {
     text-align: center
 }
 .box {
-    margin: auto
+    margin: 
+        
 }
 ```
 
@@ -583,6 +673,35 @@ child.sayName() //test
 <u>• 属性和方法被添加至this引用的对象中</u>
 
 <u>• 新创建的对象由this所引用，并且最后隐式的返回this（如果没有显示的返回其他的对象）</u>
+
+简单描述即为：
+
+1. 创建一个空对象
+2. 继承构造函数的原型
+3. this指向obj，并调用构造函数
+4. 返回对象
+
+简单实现new：
+
+```javascript
+function myNew (fn, ...args) {
+    // 第一步：创建一个空对象
+    const obj = {}
+
+    // 第二步：继承构造函数的原型
+    obj.__proto__ =  fn.prototype
+
+    // 第三步：this指向obj，并调用构造函数
+    fn.apply(obj, args)
+
+
+    // 第四步：返回对象
+    return obj
+}
+
+```
+
+
 
 我们改写上面的例子，大概就是这样：
 
@@ -678,7 +797,12 @@ https://juejin.cn/post/7031793667492806670
 
 手写发布订阅模式
 
+### 箭头函数与普通函数的区别
 
+1. 箭头函数不可作为构造函数，不能使用new
+2. 箭头函数没有自己的this
+3. 箭头函数没有arguments对象
+4. 箭头函数没有原型对象
 
 ### 说一下如何实现闭包
 
@@ -691,6 +815,48 @@ https://zhuanlan.zhihu.com/p/73046285
 1. ### 介绍一下原型链  https://juejin.cn/post/6844903989088092174
 
    https://juejin.cn/post/7007416743215759373
+
+   ### js的作用域和作用域链
+
+   **作用域：**
+
+   在js中，作用域分为`全局作用域`和`函数作用域`
+
+   - 全局作用域：代码在程序任何地方都能访问，window对象的内置书信都属于全局作用域
+   - 函数作用域：在固定的代码片段才能被访问
+
+   ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1bc495bd8b13437993c4da3a52fe6803~tplv-k3u1fbpfcp-watermark.awebp?)
+
+   作用域与上下级关系，上下级关系的确定就看函数实在哪个作用域下创建的。如上，fn作用域下创建了bar函数，那么‘fn作用域’就是‘bar作用域’的上级
+
+   作用域最大的用处就是隔离变量，不用作用域下同名变量不会有冲突.
+
+   
+
+   **作用域链：**
+
+   一般情况下，变量取值到创建这个变量的作用域中取值
+
+   但是如果在当前作用域中没有查到值，就会向上级作用域去查，知道查到全局作用域，这么一个查找过程形成的链条就叫做作用域链
+
+   ```javascript
+   
+   var x = 10;
+   
+   function fn(){
+       console.log(x);
+   }
+   
+   function show(f){
+       var x = 20;
+       f();    // 10 
+   }
+   
+   show(fn);
+   
+   ```
+
+   ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bc9141580e90438c8fc54a8888e77554~tplv-k3u1fbpfcp-watermark.awebp?)
 
 2. ### 介绍一下前端的继承方式
 
@@ -887,7 +1053,54 @@ https://zhuanlan.zhihu.com/p/73046285
 
 https://github.com/lgwebdream/FE-Interview/issues/920
 
+### 首屏加载和首屏优化
+
+计算首屏加载时间：
+
+```javascript
+times = (performance.timing.domComplete - performance.timing.navigationStart) / 1000
+```
+
+1. 减少入口文件体积，常用的比如路由懒加载，只有在解析路由时才加载组件
+
+2. 静态资源本地缓存
+
+   - 后端返回资源：采用http缓存
+   - 前端合理利用localstorage
+   - CDN静态资源缓存
+
+3. UI框架按需加载
+
+4. 避免组件重复打包
+
+   假设A.js文件是一个常用的库，现在多个路由使用A.js文件，这样就造成重复下载
+
+   解决方案：在webpack的config文件夹中，修改Co'm'mo'n'sChun'kPlugin的配置miniChunks:2
+
+   ​					miniChunks为2会把使用2次以上的包抽离出来，放进公共依赖文件中，避免了重复加载组件
+
+5. 图片资源压缩：
+
+   - 对于页面上使用的icon，可以使用在线字体图标，或者雪碧图，将众多的小图标合并到一张图上，用以减轻http请求的压力
+
+6. 开启Gzip压缩：compress-webpack-plugin
+
+
+
+
+
+
+
 ### 如何编写一个loader
+
+### webpack的构建流程事什么？从读取配置道输出文件这个过程尽可能讲全
+
+1. 初始化参数：从配置文件和Shell语句中读取与合并参数，得出最终的参数
+2. 开始编译：用上一步得到的参数初始化Compiler对象，加载所有配置的插件，执行对象的run方法开始执行编译
+3. 确定入口：根据配置中的entry找出所有的入口文件
+4. 编译模块：从入口文件出发，调用所有配置的Loader对模块进行翻译，再找出该模块依赖的模块，再递归本步骤直到所有依赖的文件都经过了本步骤的处理
+5. 完成模块编译：在经过第4步使用Loader翻译完所有模块后，得到了每个模块被翻译后的最终内容以及它们之间的依赖关系
+6. 输出资源：根据入口和模块之间的依赖关系，组装成一个个包含多个模块的Chunk，再把每个Chunk转换成
 
 ### webpack祖国哪些优化，挨罚效率方面、打包策略方面等等
 
@@ -998,7 +1211,7 @@ IgnorePlugin
 - Model（模型）：负责从数据库取数据
 - View(视图)：负责展示数据的地方
 - Controller(控制器)：用户交互的地方，例如点击事件等等
-- 思想：Controller将Model的数据展示再View上
+- 思想：Controller将Model的数据展示在View上
 
 **MVVM：**
 
@@ -1022,7 +1235,7 @@ Vue是MVVM框架，但是，不是严格符合MVVM，因为MVVM规定Model和Vie
 
 ### 为什么data是个函数并且返回一个对象
 
-是因为一个组件可能会多出调用，而每一调用就会执行data函数，并返回新的数据对象，这样，可以避免多出调用之间的数据污染。
+是因为一个组件可能会多出调用，而每一调用就会执行data函数，并返回新的数据对象，这样，可以避免多次调用之间的数据污染。
 
 
 
@@ -1040,11 +1253,20 @@ Vue是MVVM框架，但是，不是严格符合MVVM，因为MVVM规定Model和Vie
 
 ### Vue响应式是怎么实现的
 
-对象内部通过defineReactive方法，使用Obejct.defineProperty将属性进行劫持（只会劫持已经存在的属性），数组则是通过重写数组方法来实现。当页面使用对应属性时，每个属性都拥有自己的dep属性，存放它所依赖的watcher（依赖收集），当属性变化后，会通知自己对应的watcher取更新（派发更新）。
+vue通过数据劫持结合发布者订阅者模式，通过Object.defineProperty()来劫持各个属性的getter和setter，当数据发生变化时，发消息给各个订阅者，触发相应的监听回调。
+
+对象内部通过defineReactive方法，使用Obejct.defineProperty将属性进行劫持（只会劫持已经存在的属性），数组则是通过重写数组方法来实现。当页面使用对应属性时，每个属性都拥有自己的dep属性，存放它所依赖的watcher（依赖收集），当属性变化后，会通知自己对应的watcher去更新（派发更新）。
 
 源码系列：https://juejin.cn/column/6969563635194527758
 
+### Vue组件渲染和更新的过程是什么？
 
+### Vue2.x中的this为啥指向vue实例
+
+1. methods里的方法通过bind指定了this为new Vue的实例（vm），methods里的函数也都定义在vm上了，所以可以直接通过this访问到methods里面的函数
+2. data函数返回的数据对象也都存储在了mew Vue的实例（vm）上的_data上了，访问this.name时实际访问的时Object.defineProperty代理后的this._data.name。
+
+https://juejin.cn/post/7054841260820922376?utm_source=gold_browser_extension
 
 ### Vue.set方法的原理
 
@@ -1078,7 +1300,7 @@ function set(target, key, val) {
 
 ### Vue为什么要用虚拟Dom
 
-- 虚拟Dom就是用js对象来描述真是Dom，是对真是Dom的抽象
+- 虚拟Dom就是用js对象来描述真是Dom，是对真实Dom的抽象
 - 由于直接操作Dom性能低，但是js层的操作效率高，可以将Dom操作转化成对象操作最终通过diff算法比对差异进行更新Dom
 - 虚拟Dom不依赖真实平台环境，可以实现跨平台
 
@@ -1142,9 +1364,13 @@ https://juejin.cn/post/7013193754349666335
 谈谈vue的性能优化有哪些
 
 - 数据层级不要过深，合适的设置响应式数据
+- 不要将所有的数据放在data中，（静态数据放在外面），data中的数据都会增加getter和setter，会收集对应的watcher，这样会降低性能。
 - 使用数据时，缓存值得结果，不频繁取值
 - 合理设置key
+- 尽可能拆分组件，来提高复用性、提高代码的可维护性，减少不必要的渲染。
 - v-show（频繁切换性能高）和v-if得合理使用
+- 合理使用路由懒加载，
+- 图片懒加载
 - 控制组件得粒度--->vue采用组件级别更新
 - 采用函数式组件--->函数式组件开销低
 - 采用异步组件--->借助webpack得分包策略
@@ -1158,7 +1384,7 @@ https://juejin.cn/post/7013193754349666335
 
 vue是组件级更新，组件内有数据变化时，该组件就会更新。例如：this.a = 1, this.b = 2 (同一个watcher)
 
-(1) 原因：如果不采用异步更新，那么每次更新数据都会对当前组件进行重新渲染。所有为了性能考虑，vue会在本轮数据更新后，在取异步更新视图。没不是每当	 有数据	 更新，就立即更新视图。
+(1) 原因：如果不采用异步更新，那么每次更新数据都会对当前组件进行重新渲染。所有为了性能考虑，vue会在本轮数据更新后，在取异步更新视图。而不是每当	 有数据	 更新，就立即更新视图。
 
 (2) 过程： 
 
@@ -1178,4 +1404,56 @@ vue是组件级更新，组件内有数据变化时，该组件就会更新。�
 
   
 
-![](C:\Users\mingtai.liu\Desktop\js-demo\异步更新.png)
+![异步更新](C:\Users\mingtai.liu\Desktop\face\img\异步更新.png)
+
+### 判断是否是数组的方法
+
+https://blog.csdn.net/weixin_34279061/article/details/88674722
+
+- Object.prototype.toString
+
+用法：Object.prototype.toString.call(arr) === '[object, Array]'
+
+虽然Array也继承自Object，但js在Array.prototype上重写了toString，而我们通过toString.call(arr)实际上是通过原型链调用了
+
+```javascript
+let arr = [];
+console.log(Object.prototype.toString.call(arr) === '[object Array]'); // true
+```
+
+- Array.isArray
+
+```javascript
+let arr = [];
+console.log(Array.isArray(arr)); // true
+```
+
+- Array原型链上的isPrototypeOf
+
+用法：Array.prototype.isPrototypeOf(arr)
+
+Array.prototype属性表示Array构造函数的原型
+
+其中一个方法是isPrototypeOf()用于测试一个对象是否存在于另一个对象的原型链上
+
+```javascript
+let arr = []
+console.log(Array.prototype.isPrototypeOf(arr))  // true
+```
+
+- Object.getPrototypeOf
+
+用法：Object.getPrototypeOf(arr) === Array.ptotoyype
+
+Object.getPrototypeOf()方法返回指定对象的原型
+
+```javascript
+let arr = []
+Object.getPrototypeOf(arr) === Array.prototype // true
+```
+
+
+
+为什么a标签中使用img后高度多了几个像素
+
+因为img是行内元素，默认display:inline，它与文本的默认行为类似，下边缘与基线对齐，而不是紧贴容器下边缘，将display设置block即可消除上面

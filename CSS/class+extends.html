@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    class Person {
+      constructor(skin, language) {
+        this.skin = skin
+        this.language = language
+      }
+      say() {
+       return 2
+      }
+    }
+    const p = new Person('huang1', 'chinese')
+    console.log('p---', p)
+
+    class American extends Person {
+      aboutMe() {
+        console.log(this.skin + this.language)
+      }
+    }
+    const a = new American('white', 'english')
+    console.log('a---', a)
+
+    class Chinese extends Person{
+      constructor(skin, language, position) {
+        // console.log('this---', this)
+        // console.log('super---', Person.prototype)
+        super(skin, language)
+        console.log('super---', super.say())
+        // console.log('this2---', this)
+        // this.position = position
+        // console.log('this3---', this)
+      }
+    }
+    const c = new Chinese('huangw', 'chinese', 'yueyang')
+  </script>
+</body>
+</html>

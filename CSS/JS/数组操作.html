@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 去重
+    var fruits = [
+      'banana', 'apple', 'orange', 'waternelon', 'apple', 'orange', 'grape', 'apple'
+    ]
+    // 方法1：
+    var uniqueFruits1 = Array.from(new Set(fruits))
+    console.log('uniqueFruits1---', uniqueFruits1)
+    // 方法2：
+    var uniqueFruit2 = [...new Set(fruits)]
+    console.log('uniqueFruit2---', uniqueFruit2)
+
+    const arrA = [
+    {userCode: '6578', userName: '李四'},
+    {userCode: '897', userName: '王五'}
+    ]
+    const arrB = [
+      {userCode: '897', userName: '王五'},
+      {userCode: '6578', userName: '李四'}
+    ]
+    const differ = arrA.filter(v => arrB.indexOf(v.userCode) === -1)
+    console.log('differ---', differ)
+
+    var array1 = [ 
+      { "Num" :  "A "   },{ "Num" :  "B"  }
+    ];
+    var array2 = [ 
+      { "Num" :  "A1 " , "Name" :  "t1 "  }, 
+      { "Num" :  "B" , "Name" :  "t2" },
+      { "Num" :  "C "  , "Name" :  "t3 " }
+    ];
+    var result = [];
+    for (var i =  0 ; i < array2.length; i++){
+      var obj = array2[i];
+      var num = obj.Num;
+      var isExist =  false ;
+      for (var j =  0 ; j < array1.length; j++){
+        var aj = array1[j];
+        var n = aj.Num;
+        if (n == num){
+          isExist =  true ;
+          break ;
+        }
+      }
+      if (!isExist){
+        result.push(obj);
+      }
+    }
+console.log(result);
+
+// 两个数组对象，取交集
+let a = [
+  {id: 1, a: 123, b: 1234},
+  {id: 2, a: 123, b:1234}
+]
+let b = [
+  {id: 1, a: 123, b: 1234},
+  {id: 2, a: 123, b:1234},
+  {id: 3, a: 123, b: 1234},
+  {id: 4, a: 123, b: 1234}
+];
+ let arr = [...b].filter(x => [...a].some(y => y.id === x.id));
+ console.log('arr',arr)
+
+  </script>
+</body>
+</html>
