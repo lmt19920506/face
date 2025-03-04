@@ -48,6 +48,13 @@ document.addEventListener('DOMContentLoaded', function() {
             cropButton.style.display = 'inline-block';
             editButton.style.display = 'none';
             lastCropState = null;
+            // 清除画布
+            const ctx = sourceCanvas.getContext('2d');
+            ctx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
+            const previewCtx = previewCanvas.getContext('2d');
+            previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+            const resultCtx = resultCanvas.getContext('2d');
+            resultCtx.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
             return;
         }
 
@@ -55,6 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.onload = function(event) {
             image = new Image();
             image.onload = function() {
+                // 重置UI状态
+                mainImage.style.display = 'block';
+                previewDiv.style.display = 'block';
+                croppedResult.style.display = 'none';
+                cropButton.style.display = 'inline-block';
+                editButton.style.display = 'none';
+                lastCropState = null;
+
                 // 设置画布大小为原始图片大小
                 sourceCanvas.width = image.width;
                 sourceCanvas.height = image.height;
@@ -64,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // 绘制原始图片
                 const ctx = sourceCanvas.getContext('2d');
+                ctx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
                 ctx.drawImage(image, 0, 0);
 
                 // 初始化裁剪框
@@ -75,6 +91,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 设置预览容器的初始宽度
                 const previewContainer = document.querySelector('.preview');
                 previewContainer.style.width = (realWidth * scale) + 'px';
+                
+                // 清除其他画布
+                const previewCtx = previewCanvas.getContext('2d');
+                previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+                const resultCtx = resultCanvas.getContext('2d');
+                resultCtx.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
                 
                 updateCropBoxStyle();
                 updatePreview();
@@ -176,19 +198,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 updatePreview();
             }
         } else if (isDragging) {
-            // 计算新位置
+            // 计算新位置（以实际图片尺寸为基准）
             const deltaX = (e.clientX - startX) / scale;
             const deltaY = (e.clientY - startY) / scale;
-            const newX = startRealX + deltaX;
-            const newY = startRealY + deltaY;
+            let newX = startRealX + deltaX;
+            let newY = startRealY + deltaY;
 
-            // 检查是否在有效范围内
-            if (isValidCrop(newX, newY, realWidth, realHeight)) {
-                realX = newX;
-                realY = newY;
-                updateCropBoxStyle();
-                updatePreview();
-            }
+            // 限制在图片边界内
+            newX = Math.max(0, Math.min(newX, image.width - realWidth));
+            newY = Math.max(0, Math.min(newY, image.height - realHeight));
+
+            // 更新位置
+            realX = newX;
+            realY = newY;
+            updateCropBoxStyle();
+            updatePreview();
         }
     });
 
@@ -215,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 更新裁剪框样式
     function updateCropBoxStyle() {
+        // 应用缩放后的尺寸到DOM
         cropBox.style.width = (realWidth * scale) + 'px';
         cropBox.style.height = (realHeight * scale) + 'px';
         cropBox.style.left = (realX * scale) + 'px';
