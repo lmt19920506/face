@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片裁剪预览</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="upload-section">
+            <input type="file" id="imageInput" accept="image/*">
+            <button id="cropButton">裁剪</button>
+        </div>
+        
+        <div class="image-container">
+            <div class="main-image">
+                <canvas id="sourceCanvas"></canvas>
+                <div id="cropBox">
+                    <!-- 四角拖拽手柄 -->
+                    <div class="resize-handle nw" data-handle="nw"></div>
+                    <div class="resize-handle ne" data-handle="ne"></div>
+                    <div class="resize-handle sw" data-handle="sw"></div>
+                    <div class="resize-handle se" data-handle="se"></div>
+                    <!-- 四边拖拽手柄 -->
+                    <div class="resize-handle n" data-handle="n"></div>
+                    <div class="resize-handle e" data-handle="e"></div>
+                    <div class="resize-handle s" data-handle="s"></div>
+                    <div class="resize-handle w" data-handle="w"></div>
+                </div>
+            </div>
+            
+            <div class="preview">
+                <h3>预览</h3>
+                <canvas id="previewCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 

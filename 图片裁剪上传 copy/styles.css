@@ -1,0 +1,113 @@
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.upload-section {
+    margin-bottom: 20px;
+}
+
+.image-container {
+    display: flex;
+    gap: 20px;
+}
+
+.main-image {
+    position: relative;
+    border: 1px solid #ccc;
+}
+
+#sourceCanvas {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+#cropBox {
+    position: absolute;
+    border: 2px solid #fff;
+    cursor: move;
+    box-sizing: border-box;
+    /* 初始状态隐藏裁剪框 */
+    display: none;
+}
+
+/* 当有图片时显示裁剪框和遮罩 */
+.has-image #cropBox {
+    display: block;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+}
+
+/* 拖拽手柄基础样式 */
+.resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    border: 1px solid #333;
+}
+
+/* 四角拖拽手柄 */
+.resize-handle.nw {
+    top: -5px;
+    left: -5px;
+    cursor: nw-resize;
+}
+
+.resize-handle.ne {
+    top: -5px;
+    right: -5px;
+    cursor: ne-resize;
+}
+
+.resize-handle.sw {
+    bottom: -5px;
+    left: -5px;
+    cursor: sw-resize;
+}
+
+.resize-handle.se {
+    bottom: -5px;
+    right: -5px;
+    cursor: se-resize;
+}
+
+/* 四边拖拽手柄 */
+.resize-handle.n {
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: n-resize;
+}
+
+.resize-handle.e {
+    top: 50%;
+    right: -5px;
+    transform: translateY(-50%);
+    cursor: e-resize;
+}
+
+.resize-handle.s {
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: s-resize;
+}
+
+.resize-handle.w {
+    top: 50%;
+    left: -5px;
+    transform: translateY(-50%);
+    cursor: w-resize;
+}
+
+.preview {
+    min-width: 100px;
+}
+
+#previewCanvas {
+    border: 1px solid #ccc;
+    max-width: 100%;
+    height: auto;
+} 

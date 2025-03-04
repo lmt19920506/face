@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" />
+    <img class="img" src="" alt="" />
+    <button>点击上传裁剪后的结果</button>
+    <script>
+      const inp = document.querySelector("input");
+      const img = document.querySelector("img");
+      // 1.预览本地图像
+      // 2.交互
+      // 3.上传裁剪后的图像(canvas->blob->file)
+      inp.onchange = (e) => {
+        const file = e.target.files[0];
+        console.log("file---", file);
+        // 获取选择的图片的dataurl
+        // 需要一个文件读取器，把它读出来，
+        const reader = new FileReader();
+        // 读文件属于io操作，在js中，所有的IO操作都是异步的，那么一旦遇到异步场景的话，要么返回一个promise让你等待，要么就是提供回调事件，
+        reader.onload = (e) => {
+          let dataUrl = e.target.result; // base64
+          img.src = dataUrl;
+        };
+        reader.readAsDataURL(file);
+      };
+
+      function uploadResult({ cutWidth, cutHeight, cutX, cutY }) {}
+
+      const btn = document.querySelector("button");
+      btn.onclick = () => {
+        uploadResult({
+          cutWidth: 100,
+          cutHeight: 150,
+          cutX: 100,
+          cutY: 80,
+        });
+      };
+    </script>
+  </body>
+</html>
